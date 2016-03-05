@@ -1,5 +1,5 @@
 class MoviesController < ApplicationController
-
+  
   def movie_params
     params.require(:movie).permit(:title, :rating, :description, :release_date)
   end
@@ -9,10 +9,27 @@ class MoviesController < ApplicationController
     @movie = Movie.find(id) # look up movie by unique ID
     # will render app/views/movies/show.<extension> by default
   end
+  
+  
+  #######################################################################################
 
   def index
-    @movies = Movie.all
+    
+    hiliteFlag = params[:sort] 
+    
+    case hiliteFlag
+    
+      when 'title'
+        @titulo = {:title => :asc}, 'hilite'
+      when 'release_date'
+        @fecha = {:release_date => :asc}, 'hilite'
+    end
+   
+    @movies = Movie.order(params[:sort])
+    
   end
+  
+  ######################################################################################
 
   def new
     # default: render 'new' template
