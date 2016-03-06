@@ -17,6 +17,8 @@ class MoviesController < ApplicationController
 
   def index
     
+    print params
+    
     if params[:sort]  #saves the parameters so that they are remembered later on
       session[:sort] = params[:sort]
     end
@@ -26,7 +28,7 @@ class MoviesController < ApplicationController
     
 
     
-    if session[:sort] #loads previous paramaters if any
+    if session[:sort] #loads previous paramaters
       hiliteFlag = session[:sort]
     else
       hiliteFlag = params[:sort]
@@ -40,7 +42,12 @@ class MoviesController < ApplicationController
         @fecha = {:release_date => :asc}, 'hilite'
     end
    
+  if (params[:sort])
     @movies = Movie.order(params[:sort])
+  else
+    @movies = Movie.order(session[:sort])
+  end
+  
     #@movies = Movie.where{params[:ratings].keys. }
     
   end
