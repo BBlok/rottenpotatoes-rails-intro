@@ -1,5 +1,6 @@
 class MoviesController < ApplicationController
   
+
   def movie_params
     params.require(:movie).permit(:title, :rating, :description, :release_date)
   end
@@ -11,11 +12,25 @@ class MoviesController < ApplicationController
   end
   
   
+  
   #######################################################################################
 
   def index
     
-    hiliteFlag = params[:sort] 
+    if params[:sort]  #saves the parameters so that they are remembered later on
+      session[:sort] = params[:sort]
+    end
+    
+    
+    @all_ratings = Movie.all_ratings
+    
+
+    
+    if session[:sort] #loads previous paramaters if any
+      hiliteFlag = session[:sort]
+    else
+      hiliteFlag = params[:sort]
+    end
     
     case hiliteFlag
     
@@ -26,6 +41,7 @@ class MoviesController < ApplicationController
     end
    
     @movies = Movie.order(params[:sort])
+    #@movies = Movie.where{params[:ratings].keys. }
     
   end
   
@@ -58,5 +74,6 @@ class MoviesController < ApplicationController
     flash[:notice] = "Movie '#{@movie.title}' deleted."
     redirect_to movies_path
   end
+  
 
 end
